@@ -33,6 +33,7 @@ vim.opt.splitright = true
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.foldlevelstart = 99
+vim.opt.foldtext = ''
 
 -- default indentation
 vim.opt.shiftwidth = 2
@@ -60,20 +61,17 @@ map('n', 'zl', 'zR') -- 'min' fold level
 map('v', 'p', 'P')
 
 -- config
-map('n', '<leader>ce', ':edit $MYVIMRC<cr>')
-map('n', '<leader>cs', ':source $MYVIMRC<cr>')
+map('n', '<leader>ce', function() vim.cmd.edit(vim.env.MYVIMRC) end)
+map('n', '<leader>cp', function() vim.cmd.edit(vim.fn.stdpath('config') .. '/lua/plugins') end)
 
 -- misc
 map('n', '<M-s>', ':write<cr>')
 map('i', '<M-s>', '<C-o>:write<cr>')
-map('n', '<Esc>', '<cmd>:nohlsearch<cr>')
+map('n', '<Esc>', ':nohlsearch<cr>')
 
 --- ui
 map('n', '<leader>xd', ':set background=dark<cr>')
 map('n', '<leader>xl', ':set background=light<cr>')
-
---- terminal
-map('t', '<Esc>', '<C-\\><C-n>')
 
 -- bootstrap lazy
 local lazypath = vim.fn.stdpath('data').. '/lazy/lazy.nvim'
@@ -85,7 +83,8 @@ vim.opt.rtp:prepend(lazypath)
 
 -- plugins
 require('lazy').setup({
-  spec = {
-    -- add your plugins here
-  },
+  spec = 'plugins',
+  change_detection = {
+    notify = false,
+  }
 })
